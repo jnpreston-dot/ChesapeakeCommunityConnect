@@ -198,3 +198,39 @@ def create_comment(request, want, wants):
     # else:
     #     contentComment = MakeForumForm()
     # return render(request, 'account/.html', {'form': contentComment,})
+
+def viewMap(request):
+    forums = Forum.objects.filter(visibility=1)  # begin by fetching visible forums from database
+    contQuery = request.GET.get("q")  # get content and tag query from url
+    tagQuery = request.GET.getlist("t")
+    searchForm = SearchForumsForm(request.GET)  # create a search form from url
+
+    # Filter forums by content query
+    if contQuery:
+        forums = forums.filter(
+            Q(title__icontains=contQuery) |
+            Q(content__icontains=contQuery)
+        )
+
+    # Filter forums by tag query
+    if tagQuery:
+        for tag in tagQuery:
+            forums = forums.filter(tags__pk=tag)
+
+    # Serialize forums as JSON for Google Maps
+    widgets = serializers.serialize('json', forums)
+
+    # ⭐ ISSUE #18 ADDITION:
+    # Fetch all uploaded media so we can show descriptions under the map
+    media = Media.objects.all().order_by('-id')
+
+    # Render template with all required context
+    return render(
+        request,
+        'mapViewer/mapPage.html',
+        {
+            'widgets': widgets,
+            'searchForm': searchForm,
+            'media': media,   # ⭐ REQUIRED FOR ISSUE #18
+        }
+    )

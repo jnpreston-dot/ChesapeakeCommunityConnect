@@ -48,13 +48,14 @@
 <script>
 
     let signin_username = document.getElementById("signin_username");
-    {% comment %} let signin_username_helper = document.getElementById("signin_username_helper"); {% endcomment %}
+    // let signin_username_helper = document.getElementById("signin_username_helper");
 
     let signin_password = document.getElementById("signin_password");
     let signin_password_helper = document.getElementById("signin_password_helper");
     let signin = document.getElementById("signin");
 
-    {% comment %} $("#signin_username").change(function (e) {
+    /*
+    $("#signin_username").change(function (e) {
         if ($(signin_username).val() == "") {
             signin_username.classList.remove("is-danger");
             signin_username_helper.classList.remove("is-danger");
@@ -88,7 +89,8 @@
                 }
             });
         }
-    }); {% endcomment %}
+    });
+    */
 
     $("#signin_password").change(function (e) {
         if ($("#signin_password").val() != "") {
@@ -133,12 +135,12 @@
 
         function closeModal($el) {
             $el.classList.remove('is-active');
-            {% comment %} signin_username.classList.remove("is-danger"); {% endcomment %}
-            {% comment %} signin_username_helper.classList.remove("is-danger"); {% endcomment %}
-            {% comment %} signin_username.classList.remove("is-link"); {% endcomment %}
-            {% comment %} signin_username_helper.classList.remove("is-link"); {% endcomment %}
+            // signin_username.classList.remove("is-danger");
+            // signin_username_helper.classList.remove("is-danger");
+            // signin_username.classList.remove("is-link");
+            // signin_username_helper.classList.remove("is-link");
             signin_username.value = "";
-            {% comment %} signin_username_helper.textContent = ""; {% endcomment %}
+            // signin_username_helper.textContent = "";
 
             signin_password.classList.remove("is-danger");
             signin_password_helper.classList.remove("is-danger");

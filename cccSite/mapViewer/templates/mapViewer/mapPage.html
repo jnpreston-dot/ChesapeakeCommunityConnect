@@ -11,13 +11,15 @@
     c) the widgets are rendered such that our script file can access them
 -->
 <script src="{% static 'mapViewer/map-script.js' %}" defer></script>
-{{widgets|json_script}}
+{{ widgets|json_script }}
 <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBN4e1y8ECEgsg_8U6xO02_2InU8G8I8cM&libraries=places&callback=initMap" defer></script>
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBN4e1y8ECEgsg_8U6xO02_2InU8G8I8cM&libraries=places&callback=initMap"
+    defer></script>
 
 {% endblock head %}
 
 {% block content %}
+
 <div style="text-align: center; width: 100%; margin-bottom: 10px;">
     <p style="display: inline-block; max-width: 1000px; margin: 0 auto;">
         Use the interactive map below to explore community organizations and services in the Chesapeake area. 
@@ -25,28 +27,51 @@
         You can also use the search panel on the right to filter results by name or category.
     </p>
 </div>
-    <!-- Map Section -->
-    <div id="left">
-        <div id="map"></div>
-    </div>
 
-    <div id="search">
-        <form action="{% url 'mapViewer:default' %}" id="contact-form" method="get">
-            {{ searchForm.q }}
-            <div id="scroll-box">
-                <div id="id_t">
-                    {% for mTag in searchForm.t %}
-                        <div>
-                            <label for="{{ mTag.id_for_label }}">
-                                {{ mTag.tag }}
-                                <span>{{ mTag.choice_label }}</span>
-                            </label>
-                        </div>
-                    {% endfor %}
+<!-- Map Section -->
+<div id="left">
+    <div id="map"></div>
+</div>
+
+<!-- ⭐ ISSUE #18: Upload Descriptions Section (added below the map plugin) -->
+<section class="section">
+    <div class="container">
+        <h2 class="title is-4">Upload Descriptions</h2>
+
+        {% if media %}
+            {% for item in media %}
+                <div class="box">
+                    {% if item.title %}
+                        <strong>{{ item.title }}</strong><br>
+                    {% endif %}
+                    <p>{{ item.description }}</p>
                 </div>
-            </div>
-            <input type="submit" id="search-btn" class="button_CCC" value="Submit">
-        </form>
+            {% endfor %}
+        {% else %}
+            <p>No uploads yet.</p>
+        {% endif %}
     </div>
-    
+</section>
+<!-- END ISSUE #18 ADDITION -->
+
+<!-- Search Panel -->
+<div id="search">
+    <form action="{% url 'mapViewer:default' %}" id="contact-form" method="get">
+        {{ searchForm.q }}
+        <div id="scroll-box">
+            <div id="id_t">
+                {% for mTag in searchForm.t %}
+                    <div>
+                        <label for="{{ mTag.id_for_label }}">
+                            {{ mTag.tag }}
+                            <span>{{ mTag.choice_label }}</span>
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <input type="submit" id="search-btn" class="button_CCC" value="Submit">
+    </form>
+</div>
+
 {% endblock content %}

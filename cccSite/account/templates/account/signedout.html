@@ -1,67 +1,59 @@
-{%extends "account/accountBase.html"%}
-{%block accHead%}
+{% extends "account/accountBase.html" %}
+
+{% block accHead %}
 {% load static %}
 {% csrf_token %}
 <link rel="stylesheet" type="text/css" href="{% static 'account/signinstyle.css' %}">
-<title>Chesapeake Community Connect - Sign In</title>
-{%endblock accHead%}
+<title>Chesapeake Community Connect - Contributors</title>
+{% endblock accHead %}
+
 {% block accountFunc %}
-<!--initializes (?) the google API. will need to change the data-login_uri for live site-->
-{% comment %}
-<div class="body">
-     <div id="g_id_onload"
-          data-client_id="316865720473-94ccs1oka6ev4kmlv5ii261dirvjkja0.apps.googleusercontent.com"
-          data-context="signin"
-          data-ux_mode="popup"
-          data-login_uri="{% url 'account:authG' %}"
-          data-auto_prompt="false">
-     </div>
-</div>
-{% endcomment %}
 
-     <div class="containerS2">
-          <div class="wrapperS1">
-               <h1 class="heading">What it means to be a Contributor</h1>
-               <p>
-                    Labore vel odit sint est omnis ea esse esse. Et voluptate occaecati sequi. Et sed cum explicabo quaerat
-                    aut. Atque qui placeat vitae delectus eaque similique. Eum quis quia ut delectus est earum sint ex. Qui
-                    cumque corrupti et et ullam dolorum ea. Minima ut iste ut. Similique explicabo amet repellat. Ipsa
-                    deserunt in similique animi aperiam consectetur. Unde itaque sint cumque incidunt nihil optio ea.
-                    Molestiae aut quam quasi omnis. Molestiae delectus doloribus reprehenderit aut suscipit. Quae inventore
-                    enim quod non non est. Recusandae vel omnis maiores. Debitis autem hic ipsam illo dicta quis. Rerum dolor
-                    quidem eos alias est quia deleniti. Recusandae doloremque eaque id ab suscipit exercitationem ducimus
-                    dignissimos. Quos consequuntur molestiae aperiam distinctio consequatur cupiditate incidunt est. Ducimus
-                    qui sunt a. Quae sunt odio soluta reiciendis.
-               </p>
-          </div>
-     </div>
-</div>
--->
+<section class="section">
+    <div class="container">
+        <h1 class="title">What it means to be a Contributor</h1>
+        <p class="subtitle">
+            Contributors help build the Chesapeake Community Connect mission by sharing knowledge, stories, and
+            environmental insights across the region.
+        </p>
+    </div>
+</section>
 
-<!--Trying to add an alphabet banner-->
-<div class="banner">
-     {% for letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" %}
-          <span class="banner-letter">{{ letter }} </span>
-     {% endfor %}
-</div>
+<!-- Alphabet Banner -->
+<section class="section">
+    <div class="container has-text-centered">
+        <div class="banner">
+            {% for letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" %}
+                <span class="banner-letter">{{ letter }}</span>
+            {% endfor %}
+        </div>
+    </div>
+</section>
 
-<div class="columns is-centered">
-     <div class="column is-three-quarters">
-     <h3 class="title is-3">What does it mean to be a Contributor?</h3>
-     Contributors are essential to the Chesapeake Community Connect mission. By creating an account, Contributors gain the 
-     ability to create and share forums and posts, as well as comment on other Contributors’ content. Contributors can share 
-     stories, projects and efforts that are building resilience across the Chesapeake region. As a Contributor, you can aid in 
-     providing knowledge to this community on environmental issues and concerns, as well as other updates. Contributors are 
-     encouraged to include a location, resource links, and a written description to help others understand and engage with their 
-     project. Every contribution helps this community expand the network of learning and action that keeps this platform thriving. 
-     </div>
-</div>
+<!-- Contributor Description -->
+<section class="section">
+    <div class="container">
+        <h3 class="title is-3">What does it mean to be a Contributor?</h3>
+        <p>
+            Contributors are essential to the Chesapeake Community Connect mission. By creating an account, Contributors
+            gain the ability to create and share forums and posts, as well as comment on other Contributors’ content.
+            Contributors can share stories, projects, and efforts that are building resilience across the Chesapeake
+            region.
+        </p>
+        <p>
+            Contributors are encouraged to include a location, resource links, and a written description to help others
+            understand and engage with their project. Every contribution helps expand the network of learning and action
+            that keeps this platform thriving.
+        </p>
+    </div>
+</section>
 
-<div class="columns is-centered">
-     <div class="column is-three-quarters">
-     <h3 class="title is-3">List of Contributors</h3>
-          Here is where the list will go.
-     </div>
-</div>
+<!-- Contributor List Placeholder -->
+<section class="section">
+    <div class="container">
+        <h3 class="title is-3">List of Contributors</h3>
+        <p>Here is where the list will go.</p>
+    </div>
+</section>
 
 {% endblock accountFunc %}
