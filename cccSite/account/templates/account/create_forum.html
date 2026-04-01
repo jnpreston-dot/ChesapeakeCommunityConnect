@@ -1,70 +1,90 @@
-{%extends "account/accountBase.html"%}
+{% extends "account/accountBase.html" %}
+{% load static %}
 
+{% block accHead %}
+<link rel="stylesheet" type="text/css" href="{% static 'account/create_forumstyle.css' %}">
+{% endblock accHead %}
 
 {% block accountFunc %}
-<script defer> 
+
+<script defer>
     let autocomplete;
-    async function initAutocomplete(){
-        autocomplete = new google.maps.places.Autocomplete(document.getElementById('id_location'), {
-            fields: ["address_components"],
-        });
+    async function initAutocomplete() {
+        autocomplete = new google.maps.places.Autocomplete(
+            document.getElementById('id_location'),
+            { fields: ["address_components"] }
+        );
     }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKcBxdWnx-AIYQfA-NQKUR1cRXeF9fAiI&libraries=places&callback=initAutocomplete" defer></script>
 
-{% load static %}
-<head>
-    <link rel="stylesheet" type="text/css" href="{% static 'account/create_forumstyle.css' %}">
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://unpkg.com/file-upload-with-preview/dist/style.css"
-    />
-</head>
+<div id="create" class="container">
 
-<!--loads the form with line breaks between entries. forums to the URL titled manage in the account app's URL config-->
-<div id="create">
+    <!-- Step Indicators -->
+    <div class="steps mb-5 has-text-centered">
+        <span class="step-indicator active-step"></span>
+        <span class="step-indicator"></span>
+        <span class="step-indicator"></span>
+    </div>
 
-    <form action="{% url 'account:create_forum'%}" method="post" enctype="multipart/form-data" role="form">
-        {%csrf_token%}
-        {{ form.title }}
-        {{ form.firstName }}
-        {{ form.lastName }}
-        {{ form.location }}
-        {{ form.content }}
+    <form id="forumForm" action="{% url 'account:create_forum' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
 
+        <!-- STEP 1 -->
+        <div class="tab">
+            <h2 class="title is-4">Basic Information</h2>
+            <div class="field">{{ form.title }}</div>
+            <div class="field">{{ form.firstName }}</div>
+            <div class="field">{{ form.lastName }}</div>
+            <div class="field">{{ form.location }}</div>
+        </div>
 
-        <div id="scroll-box" role="group" aria-labelledby="tags-label">
-            <div id="id_tags">
-                {% for tag in form.tags %}
-                    <div>
-                        <label for="{{ tag.id_for_label }}">
-                            {{ tag.tag }}
-                            <span>{{ tag.choice_label }}</span>
-                        </label>
-                    </div>
-                {% endfor %}
+        <!-- STEP 2 -->
+        <div class="tab">
+            <h2 class="title is-4">Content & Tags</h2>
+            <div class="field">{{ form.content }}</div>
+
+            <label class="label">Tags</label>
+            <div id="scroll-box" role="group">
+                <div id="id_tags">
+                    {% for tag in form.tags %}
+                        <div class="mb-2">
+                            <label for="{{ tag.id_for_label }}">
+                                {{ tag.tag }}
+                                <span>{{ tag.choice_label }}</span>
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
 
-        {{ form.associated }}
-        {{ form.private_public }}
+        <!-- STEP 3 -->
+        <div class="tab">
+            <h2 class="title is-4">Files & Privacy</h2>
 
-        <hr>
+            <div class="field">{{ form.file1 }}</div>
+            <div class="field">{{ form.file2 }}</div>
+            <div class="field">{{ form.file3 }}</div>
+            <div class="field">{{ form.file4 }}</div>
 
-        {{ form.file1 }}
-        {{ form.file2 }}
-        {{ form.file3 }}
-        {{ form.file4 }}
-        {% comment %} <div class="custom-file-container" data-upload-id="my-unique-id"></div> {% endcomment %}
-        {% comment %} <script src="https://unpkg.com/file-upload-with-preview/dist/file-upload-with-preview.iife.js"></script> {% endcomment %}
+            <div class="field">{{ form.associated }}</div>
+            <div class="field">{{ form.private_public }}</div>
 
-        {% comment %} <script>
-            const upload = new FileUploadWithPreview.FileUploadWithPreview('my-unique-id');
-        </script> {% endcomment %}
+            <div class="field mt-4">
+                <input class="button button_CCC" id="id_submit" type="submit" value="Submit">
+            </div>
+        </div>
 
-        <input class="button_CCC" id="id_submit" type="submit" value="Submit">
+        <!-- Navigation Buttons -->
+        <div class="buttons mt-5 is-flex is-justify-content-space-between">
+            <button type="button" id="prevBtn" class="button is-light" onclick="nextPrev(-1)">Back</button>
+            <button type="button" id="nextBtn" class="button is-primary" onclick="nextPrev(1)">Continue</button>
+        </div>
+
     </form>
 </div>
+
+<script src="{% static 'account/create_forum.js' %}"></script>
 
 {% endblock accountFunc %}

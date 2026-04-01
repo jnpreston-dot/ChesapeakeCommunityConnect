@@ -8,37 +8,37 @@
             <p class="modal-card-title has-text-left">Sign In</p>
             <button type="button" class="delete" aria-label="close"></button>
         </header>
+
         <section class="modal-card-body">
+
             <div class="field">
-                {% comment %} <label class="label">Username</label> {% endcomment %}
                 <div class="control">
                     <input class="input" type="text" name="username" id="signin_username" placeholder="Username">
                 </div>
-                {% comment %} <p class="help" id="signin_username_helper"></p> {% endcomment %}
             </div>
+
             <div class="field">
-                {% comment %} <label class="label">Password</label> {% endcomment %}
                 <div class="control">
                     <input class="input" type="password" name="password" id="signin_password" placeholder="Password">
                 </div>
                 <p class="help" id="signin_password_helper"></p>
             </div>
+
             <p>Or</p>
-            <div class="field">
-                <div id="g_id_signin"></div>
-            </div>
+
+{% if not user.is_authenticated %}
+<div class="field">
+    <div id="g_id_signin"></div>
+</div>
+{% endif %}
+
+
         </section>
+
         <footer class="modal-card-foot">
             <div class="control">
                 <button class="button is-link" type="submit" id="signin" disabled>Sign In</button>
                 <button type="button" class="button is-danger sign-in-up-cancel">Cancel</button>
-            </div>
-            <br>
-            <div class="control">
-                <!--google sign in button is rendered here-->
-                <!-- <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline"
-                    data-text="signin" data-size="large" data-logo_alignment="left">
-                </div> -->
             </div>
         </footer>
     </div>
@@ -46,68 +46,23 @@
 
 
 <script>
-
     let signin_username = document.getElementById("signin_username");
-    // let signin_username_helper = document.getElementById("signin_username_helper");
-
     let signin_password = document.getElementById("signin_password");
     let signin_password_helper = document.getElementById("signin_password_helper");
     let signin = document.getElementById("signin");
 
-    /*
-    $("#signin_username").change(function (e) {
-        if ($(signin_username).val() == "") {
-            signin_username.classList.remove("is-danger");
-            signin_username_helper.classList.remove("is-danger");
-            signin_username.classList.remove("is-link");
-            signin_username_helper.classList.remove("is-link");
-            signin_username_helper.textContent = "";
-            signin.disabled = true;
-        } else {
-            $.ajax({
-                type: "GET",
-                url: "ajax/username_validation/",
-                data: {
-                    username: $(signin_username).val(),
-                },
-                success: function (data) {
-                    if (data.is_taken) {
-                        signin_username.classList.remove("is-danger");
-                        signin_username.classList.add("is-link");
-                        signin_username_helper.classList.remove("is-danger");
-                        signin_username_helper.classList.add("is-link");
-                        signin_username_helper.textContent = "That username exists.";
-                        signin.disabled = false;
-                    } else {
-                        signin_username.classList.add("is-danger");
-                        signin_username.classList.remove("is-link");
-                        signin_username_helper.classList.add("is-danger");
-                        signin_username_helper.classList.remove("is-link");
-                        signin_username_helper.textContent = "That username doesn't exist.";
-                        signin.disabled = true;
-                    }
-                }
-            });
-        }
-    });
-    */
-
-    $("#signin_password").change(function (e) {
-        if ($("#signin_password").val() != "") {
-            signin.disabled = false;
-        } else {
-            signin.disabled = true;
-        }
+    $("#signin_password").change(function () {
+        signin.disabled = $("#signin_password").val() === "";
         signin_password.classList.remove("is-danger");
         signin_password_helper.classList.remove("is-danger");
         signin_password_helper.textContent = "";
     });
 
-
-    $("#signin-modal").on("click", "#signin", function (e) {
-
+    // FIXED: AJAX login now posts to the correct Django authentication endpoint.
+    // Previous version incorrectly posted to /contribute/, causing all logins to fail.
+    $("#signin-modal").on("click", "#signin", function () {
         $.ajax({
-            url: "/contribute/",
+            url: "{% url 'account:signin' %}",
             type: "POST",
             data: {
                 username: $(signin_username).val(),
@@ -118,7 +73,7 @@
                 if (!response.is_password) {
                     signin_password.classList.add("is-danger");
                     signin_password_helper.classList.add("is-danger");
-                    signin_password_helper.textContent = "Incorrect Password."
+                    signin_password_helper.textContent = "Incorrect Password.";
                 } else {
                     location.reload(true);
                 }
@@ -126,68 +81,42 @@
         });
     });
 
-
+    // Modal open/close logic
     document.addEventListener('DOMContentLoaded', () => {
-        // Functions to open and close a modal
         function openModal($el) {
             $el.classList.add('is-active');
         }
 
         function closeModal($el) {
             $el.classList.remove('is-active');
-            // signin_username.classList.remove("is-danger");
-            // signin_username_helper.classList.remove("is-danger");
-            // signin_username.classList.remove("is-link");
-            // signin_username_helper.classList.remove("is-link");
             signin_username.value = "";
-            // signin_username_helper.textContent = "";
-
-            signin_password.classList.remove("is-danger");
-            signin_password_helper.classList.remove("is-danger");
-            signin_password.classList.remove("is-link");
-            signin_password_helper.classList.remove("is-link");
             signin_password.value = "";
             signin_password_helper.textContent = "";
-
             signin.disabled = true;
         }
 
-        function closeAllModals() {
-            (document.querySelectorAll('.modal') || []).forEach(($modal) => {
-                closeModal($modal);
-            });
-        }
-
-        // Add a click event on buttons to open a specific modal
         (document.querySelectorAll('.signin-modal-trigger') || []).forEach(($trigger) => {
             const modal = $trigger.dataset.target;
             const $target = document.getElementById(modal);
-
-            $trigger.addEventListener('click', () => {
-                openModal($target);
-            });
+            $trigger.addEventListener('click', () => openModal($target));
         });
 
-        // Add a click event on various child elements to close the parent modal
-        (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .sign-in-up-cancel') || []).forEach(($close) => {
+        (document.querySelectorAll('.modal-background, .modal-card-head .delete, .modal-card-foot .sign-in-up-cancel') || []).forEach(($close) => {
             const $target = $close.closest('.modal');
-
-            $close.addEventListener('click', () => {
-                closeModal($target);
-            });
+            $close.addEventListener('click', () => closeModal($target));
         });
 
-        // Add a keyboard event to close all modals
         document.addEventListener('keydown', (event) => {
             if (event.key === "Escape") {
-                closeAllModals();
+                (document.querySelectorAll('.modal') || []).forEach(closeModal);
             }
         });
     });
 </script>
 
-<!-- Load Google Identity Services -->
-<script src="https://accounts.google.com/gsi/client" async defer></script>
+{% if not user.is_authenticated %} 
+ <script src="https://accounts.google.com/gsi/client" async defer></script>
+
 
 <script>
   function handleCredentialResponse(response) {
@@ -200,25 +129,23 @@
         },
         success: function (data) {
             if (data.success) {
-                location.reload(); // Let Django session rebuild the UI
-            } else {
-                console.log("Google sign-in failed");
+                location.reload();
             }
         }
     });
-}
+  }
 
+  // Initialize Google Sign-In only when user is logged out
   window.onload = function () {
     google.accounts.id.initialize({
       client_id: "909497695712-h9smcju9klvlqk70celohtne9o438htn.apps.googleusercontent.com",
       callback: handleCredentialResponse,
-    //   login_uri: "http://127.0.0.1:8080/contribute/google-signin/"
     });
 
-    // Render the button automatically when the modal loads
     google.accounts.id.renderButton(
       document.getElementById("g_id_signin"),
       { theme: "outline", size: "large" }
     );
   };
 </script>
+{% endif %}
