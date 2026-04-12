@@ -1,0 +1,161 @@
+VM Environment Report & Development Environment Analysis
+1. Overview
+This document provides a comprehensive analysis of the development environments used for the Chesapeake Community Connect project. It includes a summary of the VM failures, successful operation in the Windows PowerShell environment, SSH/Git authentication issues, a detailed troubleshooting timeline, and a recommended plan for rebuilding the VM. This report is intended to document all technical challenges encountered and the steps taken to diagnose and resolve them.
+
+2. Current Environment Status
+2.1 Virtual Machine (VM) Status
+The VM remains unstable and unable to reliably support development. Key issues include:
+
+Failure to maintain a functional Python environment
+
+Dependency installation failures
+
+Broken or corrupted system‑level Python packages
+
+Repeated SSH authentication failures
+
+VS Code Git credential helper crashes
+
+Inconsistent PATH configuration
+
+Frequent connection errors when attempting to access the VM
+
+The VM is currently not suitable for active development.
+
+2.2 PowerShell Environment Status
+The Windows PowerShell environment is fully functional and stable. Observations include:
+
+Django server runs successfully
+
+All pages load without errors
+
+Google Sign‑In works correctly
+
+Multi‑step Create Forum wizard functions as expected
+
+Media uploads and template rendering behave correctly
+
+Dependencies install cleanly under Python 3.12
+
+Git and SSH authentication work without issues
+
+This confirms that the project codebase is healthy and the VM issues are environment‑specific.
+
+3. SSH Key & Connection Issues (VM Only)
+3.1 SSH Authentication Failures
+During attempts to authenticate with GitHub from the VM, the following issues were observed:
+
+Permission denied (publickey) errors
+
+GitHub rejecting authentication despite correct SSH key generation
+
+VM failing to recognize newly generated SSH keys
+
+Multiple SSH keypairs created, none successfully used by the VM
+
+HTTPS authentication also failing due to broken credential helper
+
+3.2 VS Code Credential Helper Failures
+The VM repeatedly produced errors such as:
+
+connect ECONNREFUSED /run/user/1001/vscode-git-xxxx.sock
+
+Credential helper socket crashes
+
+Git operations failing due to missing or corrupted helper processes
+
+3.3 Connection Errors
+Attempts to connect to the VM frequently resulted in:
+
+Timeout errors
+
+Connection refused
+
+Authentication loops
+
+VM failing to initialize the SSH session
+
+3.4 Conclusion
+The SSH and connection failures were caused by the VM’s corrupted environment, not GitHub or the project repository. The same SSH keys worked immediately in PowerShell, confirming the VM as the source of the problem.
+
+4. Troubleshooting Timeline
+4.1 Initial VM Failures
+VM failed to activate Python environments
+
+Dependency installation attempts failed
+
+Pillow builds repeatedly failed under Python 3.13
+
+VM Python installation showed signs of corruption
+
+4.2 SSH & Git Issues
+Generated multiple SSH keypairs
+
+Attempted to add keys to GitHub
+
+VM failed to use keys due to credential helper crashes
+
+Git operations repeatedly failed with authentication errors
+
+4.3 PowerShell Environment Setup
+Installed Python 3.12
+
+Created a clean virtual environment
+
+Installed all dependencies successfully
+
+Verified Pillow compatibility
+
+Ran Django server successfully
+
+Performed full site testing
+
+4.4 Confirmation of VM-Specific Issues
+PowerShell environment worked flawlessly
+
+VM continued to fail at dependency, SSH, and runtime layers
+
+Concluded that the VM required a rebuild
+
+5. Git/SSH Diagnostic Summary
+5.1 Git Behavior in VM
+Git operations failed due to credential helper crashes
+
+SSH keys were not recognized
+
+HTTPS authentication failed
+
+GitHub rejected all authentication attempts
+
+5.2 Git Behavior in PowerShell
+Git recognized SSH keys immediately
+
+GitHub authentication succeeded
+
+Push/pull operations worked without issue
+
+Git identity configured successfully
+
+5.3 Diagnostic Conclusion
+The Git/SSH failures were caused by:
+
+Broken VS Code credential helper
+
+Corrupted SSH configuration
+
+VM environment drift
+
+Inconsistent PATH and system-level dependencies
+
+PowerShell’s success confirms the VM as the root cause.
+
+6. Environment Comparison
+Category	VM	PowerShell
+Python Stability	Unstable	Stable
+Dependency Installation	Fails	Succeeds
+Django Server	Fails	Runs cleanly
+Google Sign‑In	Unverified	Working
+Template Rendering	Unverified	Working
+Media Uploads	Unverified	Working
+SSH/Git Authentication	Fails	Working
+Overall Reliability	Poor	Strong
