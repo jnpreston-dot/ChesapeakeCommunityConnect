@@ -1,0 +1,19 @@
+{% extends "account/accountBase.html" %}
+
+{% block accountFunc %}
+
+<h1 class="title">Google Login Information</h1>
+
+<div class="box">
+    <p><strong>Name:</strong> {{ user.name }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+
+    {% if google %}
+        <p><strong>Google ID:</strong> {{ google.googleID }}</p>
+        <p><strong>Linked Account:</strong> Yes</p>
+    {% else %}
+        <p><strong>Linked Account:</strong> No</p>
+    {% endif %}
+</div>
+
+{% endblock accountFunc %}

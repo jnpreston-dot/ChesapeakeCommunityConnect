@@ -1,6 +1,22 @@
-{%extends "account/accountBase.html"%}
+{% extends "account/accountBase.html" %}
 
+{# 
+    accountFunc is the main content block for account pages.
+    Everything inside this block replaces the placeholder in accountBase.html.
+#}
 {% block accountFunc %}
+
+{# Button to view Google login information (new feature) #}
+<p>
+    <a class="button is-link" href="{% url 'account:google_info' %}">
+        View Google Login Info
+    </a>
+</p>
+
+{# 
+    Inline CSS for the account page layout.
+    This controls the profile card, image styling, and text formatting.
+#}
 <style>
     .wrapper {
         float: right;
@@ -42,7 +58,7 @@
         color: blue;
     }
 
-    .editPro:hover{
+    .editPro:hover {
         cursor: pointer;
     }
 
@@ -51,45 +67,56 @@
         min-height: 50px;
     }
 
-    .description{
+    .description {
         margin-left: 13px;
         margin-right: 13px;
         text-align: left;
     }
-
 </style>
-<!--loads user's info from provided dictionary-->
+
+{# 
+    Main content wrapper.
+    Contains the user's profile picture, name, email, and description.
+#}
 <div id="content">
     <div class="wrapper">
+
+        {# Profile picture section #}
         <div class="imgWrapper">
-            <li><img class="proPic" src="{{ image.url }}" alt="Uploaded Image" height="150" width="150"></li>
+            <li>
+                <img class="proPic" src="{{ image.url }}" alt="Uploaded Image" height="150" width="150">
+            </li>
         </div>
+
+        {# User's name and email, passed from the view #}
         <div class="inWrapper">
-            {{name}}
-            <br>
-            {{email}}
-            <br>
-
-
+            {{ name }}<br>
+            {{ email }}<br>
         </div>
 
+        {# Button to edit account details #}
         <div class="buttonHolder">
-            <button class="editPro" id="edit-account" onclick="window.location.href='{%url 'account:manage'%}';">
-                Edit Account Details</button>
+            <button class="editPro" id="edit-account"
+                onclick="window.location.href='{% url 'account:manage' %}';">
+                Edit Account Details
+            </button>
         </div>
 
+        {# User description and rank-based message #}
         <div class="description">
-            {%if about != ""%}
-            <p>
-                {{about}}
-                {%endif%}
-                {%if rank > 1%}
-            <p>You are a trusted user.
-                {%endif%}
+
+            {# Show "about" text only if it exists #}
+            {% if about != "" %}
+                <p>{{ about }}</p>
+            {% endif %}
+
+            {# Show trusted user message if rank > 1 #}
+            {% if rank > 1 %}
+                <p>You are a trusted user.</p>
+            {% endif %}
         </div>
 
     </div>
-
-    <!--posts to the URL titled signout in the account app's URL config-->
 </div>
+
 {% endblock accountFunc %}

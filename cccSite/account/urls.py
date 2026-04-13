@@ -10,4 +10,7 @@ urlpatterns = [
     path("manage/", views.manage, name='manage'),
     path("view/", views.account_all, name='all_account'),
     path("view/<want>", views.account_view, name='account_view'),
+
+    # new ADDition to THIS
+    path("google-info/", views.google_info, name="google_info"),
 ]
