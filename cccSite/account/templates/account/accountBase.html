@@ -1,3 +1,25 @@
+{# 
+    Contributors Base Template
+    --------------------------
+    This template provides the standardized account layout used across all
+    account-related pages in Chesapeake Community Connect.
+
+    Structure:
+    - Extends base/base.html for global site layout.
+    - Provides the Bulma-based sidebar navigation on the left.
+    - Provides a main content area wrapped in a <div class="box">.
+    - The `accountFunc` block is overridden by child templates to supply
+      page-specific content while keeping layout consistent.
+
+    Sidebar Behavior:
+    - If `rank > 0`, the user is signed in and additional account links appear.
+    - If not signed in, only the Sign In link is shown.
+
+    This file should remain layout-only. No page-specific logic belongs here.
+#}
+
+
+
 {% extends "base/base.html" %}
 {% load static %}
 
@@ -15,7 +37,6 @@
             <!-- Sidebar -->
             <aside class="column is-3">
                 <nav class="menu box">
-
                     <p class="menu-label">Account</p>
                     <ul class="menu-list">
 
@@ -37,20 +58,18 @@
                         {% else %}
                             <li><a href="{% url 'account:signin' %}">Sign In</a></li>
                         {% endif %}
-                    </ul>
 
+                    </ul>
                 </nav>
             </aside>
 
             <!-- Main Content -->
             <div class="column is-9">
                 <div class="box">
-
                     {% block accountFunc %}
                         <h1 class="title">Welcome to the account interface</h1>
                         <p class="subtitle">Choose an option from the sidebar to get started.</p>
                     {% endblock accountFunc %}
-
                 </div>
             </div>
 

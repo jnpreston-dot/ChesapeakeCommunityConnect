@@ -1,43 +1,60 @@
+{#
+    Google Login Information Page
+    -----------------------------
+    This template displays the Google account details associated with the
+    currently authenticated user.
+
+    Structure:
+    - Extends account/accountBase.html to inherit the standardized
+      account layout (sidebar + main content box).
+    - Uses the `accountFunc` block to supply page-specific content.
+    - Shows user name and email from the Member model.
+    - If a Google login record exists, displays the Google ID and a success
+      message; otherwise shows a warning message.
+
+    Notes:
+    - This page is read-only; editing account details is handled in manage.html.
+    - All layout, spacing, and styling follow the unified Bulma-based system.
+#}
+
 {% extends "account/accountBase.html" %}
 
 {% block accountFunc %}
 
-<div class="box">
-    <h1 class="title is-3 mb-4">Google Login Information</h1>
+<h1 class="title is-3 mb-4">Google Login Information</h1>
 
-    <div class="content">
+<div class="content">
 
+    <p>
+        <span class="tag is-info is-light mr-2">Name</span>
+        <strong>{{ user.name }}</strong>
+    </p>
+
+    <p>
+        <span class="tag is-info is-light mr-2">Email</span>
+        <strong>{{ user.email }}</strong>
+    </p>
+
+    {% if google %}
         <p>
-            <span class="tag is-info is-light mr-2">Name</span>
-            <strong>{{ user.name }}</strong>
+            <span class="tag is-success is-light mr-2">Google ID</span>
+            <strong>{{ google.googleID }}</strong>
         </p>
 
-        <p>
-            <span class="tag is-info is-light mr-2">Email</span>
-            <strong>{{ user.email }}</strong>
-        </p>
+        <article class="message is-success mt-4">
+            <div class="message-body">
+                Your account is successfully linked with Google.
+            </div>
+        </article>
 
-        {% if google %}
-            <p>
-                <span class="tag is-success is-light mr-2">Google ID</span>
-                <strong>{{ google.googleID }}</strong>
-            </p>
+    {% else %}
+        <article class="message is-warning mt-4">
+            <div class="message-body">
+                This account is not linked to Google.
+            </div>
+        </article>
+    {% endif %}
 
-            <article class="message is-success mt-4">
-                <div class="message-body">
-                    Your account is successfully linked with Google.
-                </div>
-            </article>
-
-        {% else %}
-            <article class="message is-warning mt-4">
-                <div class="message-body">
-                    This account is not linked to Google.
-                </div>
-            </article>
-        {% endif %}
-
-    </div>
 </div>
 
 {% endblock accountFunc %}

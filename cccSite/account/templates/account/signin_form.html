@@ -4,7 +4,6 @@
 {% block head %}
     {% block accHead %}
         <title>Sign In</title>
-        <link rel="stylesheet" href="{% static 'boiler/contact_formstyle.css' %}">
     {% endblock accHead %}
 {% endblock head %}
 
@@ -16,7 +15,6 @@
             <!-- Sidebar -->
             <aside class="column is-3">
                 <nav class="menu box">
-
                     <p class="menu-label">Account</p>
                     <ul class="menu-list">
 
@@ -38,8 +36,8 @@
                         {% else %}
                             <li><a href="{% url 'account:signin' %}">Sign In</a></li>
                         {% endif %}
-                    </ul>
 
+                    </ul>
                 </nav>
             </aside>
 
@@ -55,31 +53,35 @@
 
                         <div class="columns is-multiline">
 
+                            <!-- Username -->
                             <div class="column is-6">
                                 <label class="label">Username</label>
                                 <div class="control">
-                                    {{ form.sender }}
+                                    {{ form.sender|add_class:"input" }}
                                 </div>
                             </div>
 
+                            <!-- Email -->
                             <div class="column is-6">
                                 <label class="label">Email</label>
                                 <div class="control">
-                                    {{ form.email }}
+                                    {{ form.email|add_class:"input" }}
                                 </div>
                             </div>
 
+                            <!-- Subject -->
                             <div class="column is-12">
                                 <label class="label">Subject</label>
                                 <div class="control">
-                                    {{ form.subject }}
+                                    {{ form.subject|add_class:"input" }}
                                 </div>
                             </div>
 
+                            <!-- Message -->
                             <div class="column is-12">
                                 <label class="label">Message</label>
                                 <div class="control">
-                                    {{ form.message }}
+                                    {{ form.message|add_class:"textarea" }}
                                 </div>
                             </div>
 

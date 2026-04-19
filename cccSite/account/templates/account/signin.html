@@ -1,6 +1,31 @@
 {% extends "base/base.html" %}
 {% load static %}
 
+{#
+    Google Sign-In Page
+    -------------------
+    This template provides the Google-based authentication entry point for
+    Chesapeake Community Connect.
+
+    Structure:
+    - Extends base/base.html for global layout.
+    - Uses the standardized account sidebar for navigation.
+    - The main content area is wrapped in a Bulma <div class="box">.
+    - The `accountFunc` block contains the Google Sign-In button and
+      contributor information.
+
+    Behavior:
+    - Loads the Google Identity Services client library.
+    - Renders the Google Sign-In widget using the configured client ID.
+    - If the user is not authenticated, the sidebar shows the Sign In link.
+    - If authenticated, additional account options appear.
+
+    Notes:
+    - The "Create an Account" button triggers a JS function that reveals
+      a hidden contact form (if present on the page).
+    - Styling is handled by signinStyling.css and Bulma classes.
+#}
+
 {% block head %}
     {% block accHead %}
         <title>Chesapeake Community Connect – Sign In</title>
@@ -17,7 +42,6 @@
             <!-- Sidebar -->
             <aside class="column is-3">
                 <nav class="menu box">
-
                     <p class="menu-label">Account</p>
                     <ul class="menu-list">
 
@@ -39,8 +63,8 @@
                         {% else %}
                             <li><a href="{% url 'account:signin' %}">Sign In</a></li>
                         {% endif %}
-                    </ul>
 
+                    </ul>
                 </nav>
             </aside>
 
@@ -52,7 +76,9 @@
 
                     <!-- Google Sign-In Header -->
                     <h1 class="title is-4">Sign in with Google</h1>
-                    <p class="subtitle is-6">Use your Google account to access Chesapeake Community Connect.</p>
+                    <p class="subtitle is-6">
+                        Use your Google account to access Chesapeake Community Connect.
+                    </p>
 
                     <!-- Google Sign-In Button -->
                     <div id="g_id_onload"

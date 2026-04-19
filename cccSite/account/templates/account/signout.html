@@ -1,6 +1,32 @@
 {% extends "base/base.html" %}
 {% load static %}
 
+{#
+    Signed Out Page
+    ----------------
+    This template displays the confirmation screen shown after a user signs out
+    of Chesapeake Community Connect.
+
+    Structure:
+    - Extends base/base.html for global layout.
+    - Uses the standardized account sidebar for navigation.
+    - Main content is wrapped in a Bulma <div class="box">.
+    - Does not use account/accountBase.html because this page is intentionally
+      accessible to logged-out users.
+
+    Behavior:
+    - Loads the Google Identity Services client library.
+    - Renders the Google Sign-In widget so users can immediately sign back in.
+    - Sidebar adjusts based on `rank`:
+        - If rank > 0 → user is signed in (rare on this page, but supported).
+        - If rank == 0 → user sees the Sign In link.
+
+    Notes:
+    - This page is intentionally simple: no forms, no dynamic content beyond
+      Google Sign-In.
+    - Styling and layout follow the unified Bulma-based account system.
+#}
+
 {% block head %}
     {% block accHead %}
         <title>Chesapeake Community Connect – Signed Out</title>
@@ -16,7 +42,6 @@
             <!-- Sidebar -->
             <aside class="column is-3">
                 <nav class="menu box">
-
                     <p class="menu-label">Account</p>
                     <ul class="menu-list">
 
@@ -38,8 +63,8 @@
                         {% else %}
                             <li><a href="{% url 'account:signin' %}">Sign In</a></li>
                         {% endif %}
-                    </ul>
 
+                    </ul>
                 </nav>
             </aside>
 
@@ -48,7 +73,9 @@
                 <div class="box">
 
                     <h1 class="title is-4">You have been signed out</h1>
-                    <p class="subtitle is-6">You may sign in again using your Google account below.</p>
+                    <p class="subtitle is-6">
+                        You may sign in again using your Google account below.
+                    </p>
 
                     <!-- Google Sign-In -->
                     <div id="g_id_onload"

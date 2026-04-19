@@ -2,102 +2,95 @@
 
 {% block accountFunc %}
 
-<section class="section">
-    <div class="container">
+<h1 class="title is-3 mb-5">Edit Your Account</h1>
 
-        <!-- Page Title -->
-        <h1 class="title is-3 mb-5">Edit Your Account</h1>
+<!-- Success Messages -->
+{% if messages %}
+    {% for message in messages %}
+        <article class="message is-success">
+            <div class="message-body">
+                {{ message }}
+            </div>
+        </article>
+    {% endfor %}
+{% endif %}
 
-        <!-- Success Message Placeholder -->
-        {% if messages %}
-            {% for message in messages %}
-                <article class="message is-success">
-                    <div class="message-body">
-                        {{ message }}
-                    </div>
-                </article>
-            {% endfor %}
-        {% endif %}
+<div class="box">
 
-        <div class="box">
+    <form action="{% url 'account:manage' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
 
-            <form action="{% url 'account:manage' %}" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
+        <div class="columns is-multiline">
 
-                <div class="columns is-multiline">
-
-                    <!-- Name -->
-                    <div class="column is-6">
-                        <label class="label">Name</label>
-                        <div class="control">
-                            {{ form.name|add_class:"input" }}
-                        </div>
-                    </div>
-
-                    <!-- Email -->
-                    <div class="column is-6">
-                        <label class="label">Email</label>
-                        <div class="control">
-                            {{ form.email|add_class:"input" }}
-                        </div>
-                    </div>
-
-                    <!-- About -->
-                    <div class="column is-12">
-                        <label class="label">About</label>
-                        <div class="control">
-                            {{ form.about|add_class:"textarea" }}
-                        </div>
-                    </div>
-
-                    <!-- Profile Picture Upload -->
-                    <div class="column is-12">
-                        <label class="label">Profile Picture</label>
-
-                        <div class="columns">
-                            <div class="column is-4">
-                                {% if user.pic %}
-                                    <figure class="image is-128x128">
-                                        <img class="is-rounded" src="{{ user.pic.url }}">
-                                    </figure>
-                                {% else %}
-                                    <p class="has-text-grey">No profile picture uploaded.</p>
-                                {% endif %}
-                            </div>
-
-                            <div class="column is-8">
-                                <div class="file has-name is-fullwidth">
-                                    <label class="file-label">
-                                        {{ form.pic }}
-                                        <span class="file-cta">
-                                            <span class="file-icon">
-                                                <i class="fas fa-upload"></i>
-                                            </span>
-                                            <span class="file-label">
-                                                Choose a file…
-                                            </span>
-                                        </span>
-                                        <span class="file-name">
-                                            {{ user.pic.name|default:"No file selected" }}
-                                        </span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+            <!-- Name -->
+            <div class="column is-6">
+                <label class="label">Name</label>
+                <div class="control">
+                    {{ form.name|add_class:"input" }}
                 </div>
+            </div>
 
-                <!-- Submit Button -->
-                <button class="button is-warning is-medium mt-4" type="submit">
-                    Save Changes
-                </button>
+            <!-- Email -->
+            <div class="column is-6">
+                <label class="label">Email</label>
+                <div class="control">
+                    {{ form.email|add_class:"input" }}
+                </div>
+            </div>
 
-            </form>
+            <!-- About -->
+            <div class="column is-12">
+                <label class="label">About</label>
+                <div class="control">
+                    {{ form.about|add_class:"textarea" }}
+                </div>
+            </div>
+
+            <!-- Profile Picture Upload -->
+            <div class="column is-12">
+                <label class="label">Profile Picture</label>
+
+                <div class="columns">
+                    <div class="column is-4">
+                        {% if user.pic %}
+                            <figure class="image is-128x128">
+                                <img class="is-rounded" src="{{ user.pic.url }}" alt="Profile Picture">
+                            </figure>
+                        {% else %}
+                            <p class="has-text-grey">No profile picture uploaded.</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="column is-8">
+                        <div class="file has-name is-fullwidth">
+                            <label class="file-label">
+                                {{ form.pic }}
+                                <span class="file-cta">
+                                    <span class="file-icon">
+                                        <i class="fas fa-upload"></i>
+                                    </span>
+                                    <span class="file-label">
+                                        Choose a file…
+                                    </span>
+                                </span>
+                                <span class="file-name">
+                                    {{ user.pic.name|default:"No file selected" }}
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
 
-    </div>
-</section>
+        <!-- Submit Button -->
+        <button class="button is-warning is-medium mt-4" type="submit">
+            Save Changes
+        </button>
+
+    </form>
+
+</div>
 
 {% endblock accountFunc %}
