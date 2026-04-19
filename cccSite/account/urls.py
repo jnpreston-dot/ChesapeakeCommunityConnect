@@ -13,4 +13,6 @@ urlpatterns = [
 
     # new ADDition to THIS
     path("google-info/", views.google_info, name="google_info"),
+    path('training/', views.training_page, name='training'),
+
 ]

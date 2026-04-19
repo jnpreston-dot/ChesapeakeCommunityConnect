@@ -1,27 +1,77 @@
-{%extends "base/base.html"%}
-{%block head%} 
-<script src="https://accounts.google.com/gsi/client" async></script>
-<title>Chesapeake Community Connect - Account</title>
-{%endblock head%}
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block head %}
+    {% block accHead %}
+        <title>Chesapeake Community Connect – Signed Out</title>
+        <script src="https://accounts.google.com/gsi/client" async></script>
+    {% endblock accHead %}
+{% endblock head %}
+
 {% block content %}
-<div id="content">
-    You have been signed out.
-</div>
-<div id="g_id_onload"
-     data-client_id="316865720473-94ccs1oka6ev4kmlv5ii261dirvjkja0.apps.googleusercontent.com"
-     data-context="signin"
-     data-ux_mode="popup"
-     data-login_uri="http://localhost:8080/account/authG/"
-     data-auto_prompt="false">
-</div>
+<section class="section">
+    <div class="container">
+        <div class="columns is-variable is-6">
 
-<div class="g_id_signin"
-     data-type="standard"
-     data-shape="rectangular"
-     data-theme="outline"
-     data-text="signin"
-     data-size="large"
-     data-logo_alignment="left">
-</div>
+            <!-- Sidebar -->
+            <aside class="column is-3">
+                <nav class="menu box">
 
+                    <p class="menu-label">Account</p>
+                    <ul class="menu-list">
+
+                        <li><a class="is-link">Search Contributors</a></li>
+
+                        {% if rank > 0 %}
+                            <li><a href="{% url 'account:default' %}">My Account</a></li>
+                            <li><a href="{% url 'account:manage' %}">Edit Account</a></li>
+                            <li><a>Pending Posts</a></li>
+
+                            <li class="mt-3">
+                                <form action="{% url 'account:signout' %}" method="post">
+                                    {% csrf_token %}
+                                    <button class="button is-danger is-fullwidth">
+                                        Sign Out
+                                    </button>
+                                </form>
+                            </li>
+                        {% else %}
+                            <li><a href="{% url 'account:signin' %}">Sign In</a></li>
+                        {% endif %}
+                    </ul>
+
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <div class="column is-9">
+                <div class="box">
+
+                    <h1 class="title is-4">You have been signed out</h1>
+                    <p class="subtitle is-6">You may sign in again using your Google account below.</p>
+
+                    <!-- Google Sign-In -->
+                    <div id="g_id_onload"
+                         data-client_id="316865720473-94ccs1oka6ev4kmlv5ii261dirvjkja0.apps.googleusercontent.com"
+                         data-context="signin"
+                         data-ux_mode="popup"
+                         data-login_uri="http://localhost:8080/account/authG/"
+                         data-auto_prompt="false">
+                    </div>
+
+                    <div class="g_id_signin"
+                         data-type="standard"
+                         data-shape="rectangular"
+                         data-theme="outline"
+                         data-text="signin"
+                         data-size="large"
+                         data-logo_alignment="left">
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
 {% endblock content %}

@@ -1,58 +1,108 @@
-{%extends "account/accountBase.html"%}
-{%block accHead%}
+{% extends "base/base.html" %}
 {% load static %}
 
-<script src="https://accounts.google.com/gsi/client" async></script>
-<link rel="stylesheet" type="text/css" href="{% static 'base/signinStyling.css' %}">
-<title>Chesapeake Community Connect - Sign In</title>
-{%endblock accHead%}
-{% block accountFunc %}
-<!--initializes (?) the google API. will need to change the data-login_uri for live site-->
-<div class="body">
-     <div id="g_id_onload" data-client_id="316865720473-94ccs1oka6ev4kmlv5ii261dirvjkja0.apps.googleusercontent.com"
-          data-context="signin" data-ux_mode="popup" data-login_uri="http://localhost:8080/account/authG/"
-          data-auto_prompt="false">
-     </div>
-     <div class="containerS1">
-          <div class="wrapperS1">
-               <h1 class="heading">
-                    Sign in with Google
-               </h1>
-               <!--google sign in button is rendered here-->
-               <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline"
-                    data-text="signin" data-size="large" data-logo_alignment="left">
-               </div>
-               <div class = "button" id = "create-an-account"  onclick="showAccountCreation()" style="display: block;">Create an Account</div>
-               
-          </div>
-     </div>
+{% block head %}
+    {% block accHead %}
+        <title>Chesapeake Community Connect – Sign In</title>
+        <script src="https://accounts.google.com/gsi/client" async></script>
+        <link rel="stylesheet" href="{% static 'base/signinStyling.css' %}">
+    {% endblock accHead %}
+{% endblock head %}
 
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="columns is-variable is-6">
 
-     <div class="containerS2">
-          <div class="wrapperS1">
-               <h1 class="heading">What it means to be a Contributor</h1>
-               <p>
-                    Labore vel odit sint est omnis ea esse esse. Et voluptate occaecati sequi. Et sed cum explicabo quaerat
-                    aut. Atque qui placeat vitae delectus eaque similique. Eum quis quia ut delectus est earum sint ex. Qui
-                    cumque corrupti et et ullam dolorum ea. Minima ut iste ut. Similique explicabo amet repellat. Ipsa
-                    deserunt in similique animi aperiam consectetur. Unde itaque sint cumque incidunt nihil optio ea.
-                    Molestiae aut quam quasi omnis. Molestiae delectus doloribus reprehenderit aut suscipit. Quae inventore
-                    enim quod non non est. Recusandae vel omnis maiores. Debitis autem hic ipsam illo dicta quis. Rerum dolor
-                    quidem eos alias est quia deleniti. Recusandae doloremque eaque id ab suscipit exercitationem ducimus
-                    dignissimos. Quos consequuntur molestiae aperiam distinctio consequatur cupiditate incidunt est. Ducimus
-                    qui sunt a. Quae sunt odio soluta reiciendis.
-               </p>
-          </div>
-         
-     </div>
-</div>
+            <!-- Sidebar -->
+            <aside class="column is-3">
+                <nav class="menu box">
+
+                    <p class="menu-label">Account</p>
+                    <ul class="menu-list">
+
+                        <li><a class="is-link">Search Contributors</a></li>
+
+                        {% if rank > 0 %}
+                            <li><a href="{% url 'account:default' %}">My Account</a></li>
+                            <li><a href="{% url 'account:manage' %}">Edit Account</a></li>
+                            <li><a>Pending Posts</a></li>
+
+                            <li class="mt-3">
+                                <form action="{% url 'account:signout' %}" method="post">
+                                    {% csrf_token %}
+                                    <button class="button is-danger is-fullwidth">
+                                        Sign Out
+                                    </button>
+                                </form>
+                            </li>
+                        {% else %}
+                            <li><a href="{% url 'account:signin' %}">Sign In</a></li>
+                        {% endif %}
+                    </ul>
+
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <div class="column is-9">
+                <div class="box">
+
+                    {% block accountFunc %}
+
+                    <!-- Google Sign-In Header -->
+                    <h1 class="title is-4">Sign in with Google</h1>
+                    <p class="subtitle is-6">Use your Google account to access Chesapeake Community Connect.</p>
+
+                    <!-- Google Sign-In Button -->
+                    <div id="g_id_onload"
+                         data-client_id="316865720473-94ccs1oka6ev4kmlv5ii261dirvjkja0.apps.googleusercontent.com"
+                         data-context="signin"
+                         data-ux_mode="popup"
+                         data-login_uri="http://localhost:8080/account/authG/"
+                         data-auto_prompt="false">
+                    </div>
+
+                    <div class="g_id_signin"
+                         data-type="standard"
+                         data-shape="rectangular"
+                         data-theme="outline"
+                         data-text="signin"
+                         data-size="large"
+                         data-logo_alignment="left">
+                    </div>
+
+                    <!-- Create Account Button -->
+                    <button class="button is-link is-light mt-4" onclick="showAccountCreation()">
+                        Create an Account
+                    </button>
+
+                    <!-- Contributor Info Section -->
+                    <div class="content mt-6">
+                        <h2 class="title is-5">What it means to be a Contributor</h2>
+                        <p>
+                            Contributors help expand the Chesapeake Community Connect network by sharing stories,
+                            projects, and environmental updates across the region. Your participation strengthens
+                            community knowledge and supports resilience efforts.
+                        </p>
+                    </div>
+
+                    {% endblock accountFunc %}
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
 
 <script>
-     function showAccountCreation() {
-         const contactForm = document.getElementById("contact-form");
-         contactForm.style.display = "block";
-         const contactButton = document.getElementById("show-create-an-account-button");
-         contactButton.style.display = "none";
-     }
+    function showAccountCreation() {
+        const contactForm = document.getElementById("contact-form");
+        if (contactForm) {
+            contactForm.style.display = "block";
+        }
+    }
 </script>
-{% endblock accountFunc %}
+
+{% endblock content %}

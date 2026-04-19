@@ -1,19 +1,100 @@
+{% extends "base/base.html" %}
 {% load static %}
-<head>
-    <link rel="stylesheet" type="text/css" href="{% static 'boiler/contact_formstyle.css' %}">
-</head>
 
-<body>
-    <form action="{% url 'account:signin_form'%}" id="signin-form" style="display: none;" method="post">
-        {% csrf_token %}
-        <div class="half left cf">
-            {{ form.sender }}
-            {{ form.email }}
-            {{ form.subject }}
+{% block head %}
+    {% block accHead %}
+        <title>Sign In</title>
+        <link rel="stylesheet" href="{% static 'boiler/contact_formstyle.css' %}">
+    {% endblock accHead %}
+{% endblock head %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="columns is-variable is-6">
+
+            <!-- Sidebar -->
+            <aside class="column is-3">
+                <nav class="menu box">
+
+                    <p class="menu-label">Account</p>
+                    <ul class="menu-list">
+
+                        <li><a class="is-link">Search Contributors</a></li>
+
+                        {% if rank > 0 %}
+                            <li><a href="{% url 'account:default' %}">My Account</a></li>
+                            <li><a href="{% url 'account:manage' %}">Edit Account</a></li>
+                            <li><a>Pending Posts</a></li>
+
+                            <li class="mt-3">
+                                <form action="{% url 'account:signout' %}" method="post">
+                                    {% csrf_token %}
+                                    <button class="button is-danger is-fullwidth">
+                                        Sign Out
+                                    </button>
+                                </form>
+                            </li>
+                        {% else %}
+                            <li><a href="{% url 'account:signin' %}">Sign In</a></li>
+                        {% endif %}
+                    </ul>
+
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <div class="column is-9">
+                <div class="box">
+
+                    <h1 class="title is-4">Sign In</h1>
+                    <p class="subtitle is-6">Enter your information below to continue.</p>
+
+                    <form action="{% url 'account:signin_form' %}" method="post">
+                        {% csrf_token %}
+
+                        <div class="columns is-multiline">
+
+                            <div class="column is-6">
+                                <label class="label">Username</label>
+                                <div class="control">
+                                    {{ form.sender }}
+                                </div>
+                            </div>
+
+                            <div class="column is-6">
+                                <label class="label">Email</label>
+                                <div class="control">
+                                    {{ form.email }}
+                                </div>
+                            </div>
+
+                            <div class="column is-12">
+                                <label class="label">Subject</label>
+                                <div class="control">
+                                    {{ form.subject }}
+                                </div>
+                            </div>
+
+                            <div class="column is-12">
+                                <label class="label">Message</label>
+                                <div class="control">
+                                    {{ form.message }}
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <button class="button is-link is-medium mt-4" type="submit">
+                            Submit
+                        </button>
+
+                    </form>
+
+                </div>
+            </div>
+
         </div>
-        <div class="half right cf">
-            {{ form.message }}
-        </div>
-        <input type="submit" value="Submit" id="input-submit">
-    </form>
-</body>
+    </div>
+</section>
+{% endblock content %}

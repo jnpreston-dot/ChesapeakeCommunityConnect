@@ -165,3 +165,6 @@ def google_info(request):
         "email": userInz.email,
         "google": google,
     })
+
+def training_page(request):
+    return render(request, "account/training_page.html")

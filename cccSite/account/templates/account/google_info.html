@@ -2,18 +2,42 @@
 
 {% block accountFunc %}
 
-<h1 class="title">Google Login Information</h1>
-
 <div class="box">
-    <p><strong>Name:</strong> {{ user.name }}</p>
-    <p><strong>Email:</strong> {{ user.email }}</p>
+    <h1 class="title is-3 mb-4">Google Login Information</h1>
 
-    {% if google %}
-        <p><strong>Google ID:</strong> {{ google.googleID }}</p>
-        <p><strong>Linked Account:</strong> Yes</p>
-    {% else %}
-        <p><strong>Linked Account:</strong> No</p>
-    {% endif %}
+    <div class="content">
+
+        <p>
+            <span class="tag is-info is-light mr-2">Name</span>
+            <strong>{{ user.name }}</strong>
+        </p>
+
+        <p>
+            <span class="tag is-info is-light mr-2">Email</span>
+            <strong>{{ user.email }}</strong>
+        </p>
+
+        {% if google %}
+            <p>
+                <span class="tag is-success is-light mr-2">Google ID</span>
+                <strong>{{ google.googleID }}</strong>
+            </p>
+
+            <article class="message is-success mt-4">
+                <div class="message-body">
+                    Your account is successfully linked with Google.
+                </div>
+            </article>
+
+        {% else %}
+            <article class="message is-warning mt-4">
+                <div class="message-body">
+                    This account is not linked to Google.
+                </div>
+            </article>
+        {% endif %}
+
+    </div>
 </div>
 
 {% endblock accountFunc %}
